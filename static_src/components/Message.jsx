@@ -1,5 +1,6 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
+import Chip from 'material-ui/Chip';
 
 export default class Message extends React.Component {
     static propTypes = {
@@ -9,7 +10,7 @@ export default class Message extends React.Component {
 
     render() {
         return (
-            <div className={this.props.sender === "me" ? "me" : "bot"}>
-                {this.props.message}</div>)
+            <Chip className={this.props.sender === 'me' ? 'me' : 'bot'}>
+                {this.props.message}</Chip>)
     }
 }

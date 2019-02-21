@@ -1,14 +1,20 @@
 import React from 'react';
-import "../style.css";
-import MessageField from "./MessageField";
+import {Switch, Route} from 'react-router-dom';
+import '../style.css';
+import Layout from './Layout';
 
 
 export default class app extends React.Component {
     componentDidMount() {
-        console.log("Это работает");
+        console.log('Это работает');
     }
 
     render() {
-        return (<MessageField/>)
+        return (
+            <Switch>
+                <Route exact path='/' component={Layout}/>
+                <Route exact path='/chat/:chatId/' render={obj => <Layout chatId={obj.match.params.chatId}/>}/>
+            </Switch>
+        )
     }
 }

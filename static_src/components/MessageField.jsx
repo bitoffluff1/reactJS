@@ -1,52 +1,88 @@
-import React from "react";
-import Message from "./Message";
+import React from 'react';
+import PropTypes from 'prop-types';
+import TextField from 'material-ui/TextField';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import SendIcon from 'material-ui/svg-icons/content/send';
+import '../style/messages.sass';
+import Message from './Message';
 
 export default class MessageField extends React.Component {
+    static propTypes = {
+        chatId: PropTypes.string.isRequired,
+    };
+
     state = {
         curId: 1,
-        messageList: [],
+        messageLists: {1: [], 2: [], 3: [], 4: [], 5: []},
         messages: {},
-        input: "",
+        input: '',
     };
 
 //после того как отработала функция рендер
     componentDidUpdate(prevProps, prevState) {
-        const lastMessageId = this.state.messageList[this.state.messageList.length - 1];
+        const {chatId} = this.props;
 
+        const messageList = this.state.messageLists[chatId];
+        const lastMessageId = messageList[messageList.length - 1];
         const lastMessageSender = this.state.messages[lastMessageId] ?
-            this.state.messages[lastMessageId].sender : "";
+            this.state.messages[lastMessageId].sender : '';
 
-        if (prevState.messageList.length < this.state.messageList.length && lastMessageSender === "me") {
-            setTimeout(this.handleReplyMessage, 2000);
+        if (prevState.messageLists[chatId].length < messageList.length && lastMessageSender === 'me') {
+            setTimeout(() => this.handleReplyMessage(), 2000);
         }
-    }
-
-    handleSendMessage = () => {
-        const messageList = this.state.messageList.slice();
-        messageList.push(this.state.curId);
-
-        const messages = this.state.messages;
-        messages[this.state.curId] = {sender: "me", message: this.state.input};
-
-        this.setState({messageList, messages, input: "", curId: this.state.curId + 1});
     };
 
-    handleInput = (e) => {
-        this.setState({[e.target.name]: e.target.value});
+    handleSendMessage = () => {
+        const {chatId} = this.props;
+        const {messages, curId, input, messageLists} = this.state;
+
+        const messageList = [...messageLists[chatId], curId];
+        const newMessageLists = Object.assign({}, messageLists, {[chatId]: messageList});
+
+        messages[curId] = {
+            sender: 'me',
+            message: input,
+            chatId
+        };
+
+        this.setState({
+            messageLists: newMessageLists,
+            messages,
+            input: '',
+            curId: curId + 1
+        });
     };
 
     handleReplyMessage = () => {
-        const messageList = this.state.messageList.slice();
-        messageList.push(this.state.curId);
+        const {chatId} = this.props;
+        const {messages, curId, messageLists} = this.state;
 
-        const messages = this.state.messages;
-        messages[this.state.curId] = {sender: "bot", message: "Что вам нужно?"};
+        const messageList = [...messageLists[chatId], curId];
+        const newMessageLists = Object.assign({}, messageLists, {[chatId]: messageList});
 
-        this.setState({messageList, messages, input: "", curId: this.state.curId + 1});
+        const newMessages = Object.assign({}, messages, {
+            [curId]: {
+                sender: 'bot',
+                message: 'Что нужно?',
+                chatId: chatId
+            }
+        });
+
+        this.setState(
+            {
+                messageLists: newMessageLists,
+                messages: newMessages,
+                input: '',
+                curId: curId + 1
+            });
+    };
+
+    handleInput = (e) => {
+        this.setState({[e.target.name]: e.target.value})
     };
 
     render() {
-        const messages = this.state.messageList.map((messageId, index) =>
+        const messages = this.state.messageLists[this.props.chatId].map((messageId, index) =>
             <Message
                 key={`${messageId}_${index}`}
                 sender={this.state.messages[messageId].sender}
@@ -55,13 +91,19 @@ export default class MessageField extends React.Component {
         );
 
         return (
-            <div className={"box"}>
-                {this.state.messageList.length === 0 &&
+            <div className={'box'}>
+                {this.state.messages.length === 0 &&
                 <div style={{opacity: 0.5}}>Пока нет ни одного сообщения</div>}
 
                 {messages}
-                <input name="input" value={this.state.input} placeholder={"Введите сообщение"} onChange={this.handleInput}/>
-                <button onClick={this.handleSendMessage}>Отправить</button>
+                <TextField
+                    hintText={'Введите сообщение'}
+                    name='input'
+                    value={this.state.input}
+                    onChange={this.handleInput}/>
+                <FloatingActionButton onClick={this.handleSendMessage}>
+                    <SendIcon/>
+                </FloatingActionButton>
             </div>
         )
     };
