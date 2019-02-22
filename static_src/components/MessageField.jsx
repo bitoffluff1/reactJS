@@ -6,6 +6,11 @@ import SendIcon from 'material-ui/svg-icons/content/send';
 import '../style/messages.sass';
 import Message from './Message';
 
+const style = {
+    width: 56,
+    marginLeft: 20
+};
+
 export default class MessageField extends React.Component {
     static propTypes = {
         chatId: PropTypes.string.isRequired,
@@ -92,19 +97,23 @@ export default class MessageField extends React.Component {
 
         return (
             <div className={'box'}>
-                {this.state.messages.length === 0 &&
+                {Object.keys(this.state.messages).length === 0 &&
                 <div style={{opacity: 0.5}}>Пока нет ни одного сообщения</div>}
 
-                {messages}
-                <TextField
-                    hintText={'Введите сообщение'}
-                    name='input'
-                    value={this.state.input}
-                    onChange={this.handleInput}/>
-                <FloatingActionButton onClick={this.handleSendMessage}>
-                    <SendIcon/>
-                </FloatingActionButton>
+                <div className={'messages-box'}>{messages}</div>
+                <div className={'send-box'}>
+                    <TextField
+                        fullWidth={true}
+                        hintText={'Введите сообщение'}
+                        name='input'
+                        value={this.state.input}
+                        onChange={this.handleInput}/>
+                    <FloatingActionButton style={style} onClick={this.handleSendMessage}>
+                        <SendIcon/>
+                    </FloatingActionButton>
+                </div>
             </div>
         )
     };
+
 }

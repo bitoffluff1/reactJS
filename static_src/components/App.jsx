@@ -4,7 +4,7 @@ import '../style.css';
 import Layout from './Layout';
 
 
-export default class app extends React.Component {
+export default class App extends React.Component {
     componentDidMount() {
         console.log('Это работает');
     }
