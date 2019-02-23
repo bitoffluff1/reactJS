@@ -96,12 +96,12 @@ export default class MessageField extends React.Component {
         );
 
         return (
-            <div className={'box'}>
+            <div className='box'>
                 {Object.keys(this.state.messages).length === 0 &&
                 <div style={{opacity: 0.5}}>Пока нет ни одного сообщения</div>}
 
-                <div className={'messages-box'}>{messages}</div>
-                <div className={'send-box'}>
+                <div className='messages-box'>{messages}</div>
+                <div className='send-box'>
                     <TextField
                         fullWidth={true}
                         hintText={'Введите сообщение'}
