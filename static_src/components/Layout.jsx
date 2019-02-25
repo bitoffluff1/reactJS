@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ChatList from './ChatList';
-import '../style/layout.sass';
+import Header from './Header';
 import MessageField from './MessageField';
+import '../style/layout.sass';
 
 export default class Layout extends React.Component {
     static propTypes = {
@@ -15,14 +16,18 @@ export default class Layout extends React.Component {
 
     render() {
         return (
-            <div className={'layout'}>
-                <div className={'layout-left-side'}>
-                    <ChatList chatId={this.props.chatId}/>
+            [
+                <Header/>,
+                <div className={'layout'}>
+                    <div className={'layout-left-side'}>
+                        <ChatList chatId={this.props.chatId}/>
+                    </div>
+                    <div className={'layout-right-side'}>
+                        <MessageField chatId={this.props.chatId}/>
+                    </div>
                 </div>
-                <div className={'layout-right-side'}>
-                    <MessageField chatId={this.props.chatId}/>
-                </div>
-            </div>
+            ]
         )
     }
 }
+
