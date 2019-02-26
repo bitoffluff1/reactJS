@@ -22,6 +22,15 @@ class MessageField extends React.Component {
         input: ''
     };
 
+    handleInput = (e) => {
+        this.setState({[e.target.name]: e.target.value})
+    };
+
+    handleSendMessage = () => {
+        this.props.sendMessage(this.props.chatId, this.state.input);
+        this.setState({input: ''});
+    };
+
 //после того как отработала функция рендер
     componentDidUpdate(prevProps) {
         const {chatId, messageLists, messages} = this.props;
@@ -36,17 +45,8 @@ class MessageField extends React.Component {
         }
     };
 
-    handleSendMessage = () => {
-        this.props.sendMessage(this.props.chatId, this.state.input);
-        this.setState({input: ''});
-    };
-
     handleReplyMessage = () => {
         this.props.replayMessage(this.props.chatId);
-    };
-
-    handleInput = (e) => {
-        this.setState({[e.target.name]: e.target.value})
     };
 
     render() {

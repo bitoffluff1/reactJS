@@ -14,8 +14,10 @@ import '../style/layout.sass';
 
 class ChatList extends React.Component {
     static propTypes = {
-        chatId: PropTypes.string
+        chatId: PropTypes.string.isRequired,
+        messageCountInChat: PropTypes.object.isRequired
     };
+
 
     render() {
         return (
@@ -26,6 +28,7 @@ class ChatList extends React.Component {
                         className={this.props.chatId === '1' ? 'active' : ''}
                         primaryText='Chat-1'
                         leftIcon={<ContentInbox color={teal50}/>}
+                        rightIcon={<div className='messageCountInChat'>{this.props.messageCountInChat[1].length}</div>}
                     />
                 </Link>
                 <Link to='/chat/2/'>
@@ -34,6 +37,7 @@ class ChatList extends React.Component {
                         className={this.props.chatId === '2' ? 'active' : ''}
                         primaryText='Chat-2'
                         leftIcon={<ActionGrade color={teal50}/>}
+                        rightIcon={<div className='messageCountInChat'>{this.props.messageCountInChat[2].length}</div>}
                     />
                 </Link>
                 <Link to='/chat/3/'>
@@ -42,6 +46,7 @@ class ChatList extends React.Component {
                         className={this.props.chatId === '3' ? 'active' : ''}
                         primaryText='Chat-3'
                         leftIcon={<ContentSend color={teal50}/>}
+                        rightIcon={<div className='messageCountInChat'>{this.props.messageCountInChat[3].length}</div>}
                     />
                 </Link>
                 <Link to='/chat/4/'>
@@ -50,6 +55,7 @@ class ChatList extends React.Component {
                         className={this.props.chatId === '4' ? 'active' : ''}
                         primaryText='Chat-4'
                         leftIcon={<ContentDrafts color={teal50}/>}
+                        rightIcon={<div className='messageCountInChat'>{this.props.messageCountInChat[4].length}</div>}
                     />
                 </Link>
                 <Link to='/chat/5/'>
@@ -58,6 +64,7 @@ class ChatList extends React.Component {
                         className={this.props.chatId === '5' ? 'active' : ''}
                         primaryText='Chat-5'
                         leftIcon={<ContentInbox color={teal50}/>}
+                        rightIcon={<div className='messageCountInChat'>{this.props.messageCountInChat[5].length}</div>}
                     />
                 </Link>
             </List>
@@ -65,6 +72,8 @@ class ChatList extends React.Component {
     }
 }
 
-const mapStateToProps = ({}) => ({});
+const mapStateToProps = ({messageReducer}) => ({
+    messageCountInChat: messageReducer.messageLists
+});
 const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
 export default connect(mapStateToProps, mapDispatchToProps)(ChatList);

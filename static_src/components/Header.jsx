@@ -9,12 +9,11 @@ class Header extends React.Component {
         messageCount: PropTypes.number
     };
 
-    static defaultProps = {
-        messageCount: 10
-    };
 
     render() {
-        return (<div className='header'>{this.props.messageCount}</div>)
+        return (<div className='header'>
+            <p className='header-text'>Общее количество сообщений в мессенджере: {this.props.messageCount}</p>
+        </div>)
     }
 }
 
