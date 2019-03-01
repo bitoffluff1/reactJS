@@ -6,14 +6,13 @@ import Message from './Message';
 import TextField from 'material-ui/TextField';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import SendIcon from 'material-ui/svg-icons/content/send';
-import {sendMessage, replayMessage} from '../actions/messageActions';
+import {sendMessage} from '../actions/messageActions';
 import '../style/messages.sass';
 
 class MessageField extends React.Component {
     static propTypes = {
         chatId: PropTypes.string.isRequired,
         sendMessage: PropTypes.func.isRequired,
-        replayMessage: PropTypes.func.isRequired,
         messageLists: PropTypes.object.isRequired,
         messages: PropTypes.object.isRequired
     };
@@ -31,23 +30,6 @@ class MessageField extends React.Component {
         this.setState({input: ''});
     };
 
-//после того как отработала функция рендер
-    componentDidUpdate(prevProps) {
-        const {chatId, messageLists, messages} = this.props;
-
-        const messageList = messageLists[chatId];
-        const lastMessageId = messageList[messageList.length - 1];
-        const lastMessageSender = messages[lastMessageId] ?
-            messages[lastMessageId].sender : '';
-
-        if (prevProps.messageLists[chatId].length < messageList.length && lastMessageSender === 'me') {
-            setTimeout(() => this.handleReplyMessage(), 2000);
-        }
-    };
-
-    handleReplyMessage = () => {
-        this.props.replayMessage(this.props.chatId);
-    };
 
     render() {
         const {messageLists, messages, chatId} = this.props;
@@ -88,5 +70,5 @@ const mapStateToProps = ({messageReducer}) => ({
     messageLists: messageReducer.messageLists,
     messages: messageReducer.messages
 });
-const mapDispatchToProps = dispatch => bindActionCreators({sendMessage, replayMessage}, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({sendMessage}, dispatch);
 export default connect(mapStateToProps, mapDispatchToProps)(MessageField);

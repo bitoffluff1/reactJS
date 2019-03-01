@@ -12,3 +12,10 @@ export const replayMessage = (chatId) => ({
     type: REPLY_MESSAGE,
     chatId
 });
+
+export const ADD_CHAT = '@@message/ADD_CHAT';
+
+export const addChat = (chatId) => ({
+    type: ADD_CHAT,
+    chatId
+});

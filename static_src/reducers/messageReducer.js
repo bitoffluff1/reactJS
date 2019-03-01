@@ -1,8 +1,9 @@
 import update from 'react-addons-update';
-import {SEND_MESSAGE, REPLY_MESSAGE} from '../actions/messageActions';
+import {SEND_MESSAGE, REPLY_MESSAGE, ADD_CHAT} from '../actions/messageActions';
 
 const initialStore = {
     curId: 1,
+    chatList: {1: 'Chat 1', 2: 'Chat 2', 3: 'Chat 3', 4: 'Chat 4', 5: 'Chat 5'},
     messageLists: {1: [], 2: [], 3: [], 4: [], 5: []},
     messages: {}
 };
@@ -54,6 +55,17 @@ export default function messageReducer(store = initialStore, action) {
                 messageLists: {$set: newMessageLists},
                 messages: {$set: newMessages}
             });
+        }
+
+        case ADD_CHAT: {
+            const newChatNumber = Object.keys(store.chatList).length + 1;
+            const newChat = {...store.chatList, [newChatNumber]: `Chat ${newChatNumber}`};
+            const newMessageLists = {...store.messageLists, [newChatNumber]: []};
+
+            return update(store, {
+                chatList: {$set: newChat},
+                messageLists: {$set: newMessageLists}
+            })
         }
 
         default:
