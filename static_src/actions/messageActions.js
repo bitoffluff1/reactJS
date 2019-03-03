@@ -15,7 +15,23 @@ export const replayMessage = (chatId) => ({
 
 export const ADD_CHAT = '@@message/ADD_CHAT';
 
-export const addChat = (chatId) => ({
+export const addChat = (nameChat, chatId) => ({
     type: ADD_CHAT,
+    nameChat,
     chatId
 });
+
+export const HIGHLIGHT = '@@message/HIGHLIGHT';
+
+export const highlight = (chatId) => ({
+    type: HIGHLIGHT,
+    chatId
+});
+
+export const UNHIGHLIGHT = '@@message/UNHIGHLIGHT';
+
+export const unhighlight = (chatId) => ({
+    type: UNHIGHLIGHT,
+    chatId
+});
+

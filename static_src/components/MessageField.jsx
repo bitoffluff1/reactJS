@@ -35,7 +35,7 @@ class MessageField extends React.Component {
         const {messageLists, messages, chatId} = this.props;
         const messagesComponent = messageLists[chatId].map((item, i) =>
             <Message
-                key={`${item}_${i}`}
+                key={i}
                 sender={messages[item].sender}
                 message={messages[item].message}
             />
@@ -56,8 +56,7 @@ class MessageField extends React.Component {
                         onChange={this.handleInput}/>
                     <FloatingActionButton
                         style={{width: 56, marginLeft: 20}}
-                        onClick={this.handleSendMessage}
-                    >
+                        onClick={this.handleSendMessage}>
                         <SendIcon/>
                     </FloatingActionButton>
                 </div>

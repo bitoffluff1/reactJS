@@ -5,9 +5,6 @@ import Layout from './Layout';
 
 
 export default class App extends React.Component {
-    componentDidMount() {
-        console.log('Это работает');
-    }
 
     render() {
         return (

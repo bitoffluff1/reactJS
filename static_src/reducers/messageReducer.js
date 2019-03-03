@@ -1,11 +1,13 @@
 import update from 'react-addons-update';
 import {SEND_MESSAGE, REPLY_MESSAGE, ADD_CHAT} from '../actions/messageActions';
+import {HIGHLIGHT, UNHIGHLIGHT} from '../actions/messageActions';
 
 const initialStore = {
     curId: 1,
     chatList: {1: 'Chat 1', 2: 'Chat 2', 3: 'Chat 3', 4: 'Chat 4', 5: 'Chat 5'},
     messageLists: {1: [], 2: [], 3: [], 4: [], 5: []},
-    messages: {}
+    messages: {},
+    highlightedChat: undefined
 };
 
 
@@ -57,15 +59,43 @@ export default function messageReducer(store = initialStore, action) {
             });
         }
 
-        case ADD_CHAT: {
-            const newChatNumber = Object.keys(store.chatList).length + 1;
-            const newChat = {...store.chatList, [newChatNumber]: `Chat ${newChatNumber}`};
-            const newMessageLists = {...store.messageLists, [newChatNumber]: []};
+        case HIGHLIGHT: {
+            const highChat = action.chatId;
 
             return update(store, {
-                chatList: {$set: newChat},
-                messageLists: {$set: newMessageLists}
-            })
+                highlightedChat: {$set: highChat},
+            });
+        }
+        case UNHIGHLIGHT: {
+            const highChat = undefined;
+
+            return update(store, {
+                highlightedChat: {$set: highChat},
+            });
+
+        }
+
+        case ADD_CHAT: {
+            const {nameChat} = action;
+            if (nameChat === '') {
+                const newChatNumber = Object.keys(store.chatList).length + 1;
+                const newChat = {...store.chatList, [newChatNumber]: `Chat ${newChatNumber}`};
+                const newMessageLists = {...store.messageLists, [newChatNumber]: []};
+
+                return update(store, {
+                    chatList: {$set: newChat},
+                    messageLists: {$set: newMessageLists}
+                })
+            } else {
+                const newChatNumber = Object.keys(store.chatList).length + 1;
+                const newChat = {...store.chatList, [newChatNumber]: `${nameChat}`};
+                const newMessageLists = {...store.messageLists, [newChatNumber]: []};
+
+                return update(store, {
+                    chatList: {$set: newChat},
+                    messageLists: {$set: newMessageLists}
+                })
+            }
         }
 
         default:
