@@ -7,23 +7,28 @@ import {List, ListItem} from 'material-ui/List';
 import ContentInbox from 'material-ui/svg-icons/content/inbox';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import {teal50} from 'material-ui/styles/colors';
-import {addChat} from "../actions/messageActions";
+import {addChat, loadChats } from "../actions/messageActions";
 import '../style/layout.sass';
 
 
 class ChatList extends React.Component {
     static propTypes = {
         chatId: PropTypes.string.isRequired,
-        messageCountInChat: PropTypes.object.isRequired,
         push: PropTypes.func.isRequired,
-        chatList: PropTypes.object.isRequired,
+        chats: PropTypes.object.isRequired,
         addChat: PropTypes.func.isRequired,
         highlightedChat: PropTypes.string,
+        loadChats: PropTypes.func.isRequired
     };
 
     state = {
         nameChat: ''
     };
+
+    componentDidMount() {
+        this.props.loadChats();
+    }
+
     handleInput = (e) => {
         this.setState({nameChat: e.target.value})
     };
@@ -39,17 +44,17 @@ class ChatList extends React.Component {
 
 
     render() {
-        const {messageCountInChat, chatList} = this.props;
-        const chatLinks = Object.keys(chatList).map(
+        const {chats} = this.props;
+        const chatLinks = Object.keys(chats).map(
             (chatNumber, i) =>
                 <ListItem
                     key={i}
                     style={{color: teal50}}
                     className={this.props.highlightedChat === chatNumber ? 'newMassage' :
                         this.props.chatId === chatNumber ? 'active' : ''}
-                    primaryText={`${chatList[chatNumber]}`}
+                    primaryText={`${chats[chatNumber].name}`}
                     leftIcon={<ContentInbox color={teal50}/>}
-                    rightIcon={<div className='messageCountInChat'>{messageCountInChat[chatNumber].length}</div>}
+                    rightIcon={<div className='messageCountInChat'>{chats[chatNumber].messages.length}</div>}
                     onClick={() => this.handleChangeChat(chatNumber)}
                 />
         );
@@ -76,9 +81,8 @@ class ChatList extends React.Component {
 }
 
 const mapStateToProps = ({messageReducer}) => ({
-    messageCountInChat: messageReducer.messageLists,
-    chatList: messageReducer.chatList,
+    chats: messageReducer.chats,
     highlightedChat: messageReducer.highlightedChat
 });
-const mapDispatchToProps = dispatch => bindActionCreators({push, addChat}, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({push, addChat, loadChats}, dispatch);
 export default connect(mapStateToProps, mapDispatchToProps)(ChatList);

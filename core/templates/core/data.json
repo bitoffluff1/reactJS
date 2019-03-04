@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "name": "Games",
+    "messages": [
+      {
+        "id": 1,
+        "sender": "me",
+        "message": "Привет!"
+      },
+      {
+        "id": 2,
+        "sender": "bot",
+        "message": "Я робот"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Trips",
+    "messages": [
+      {
+        "id": 3,
+        "sender": "me",
+        "message": "Как дела?"
+      },
+      {
+        "id": 4,
+        "sender": "bot",
+        "message": "Я робот"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Business",
+    "messages": [
+      {
+        "id": 5,
+        "sender": "me",
+        "message": "Добрый день!"
+      },
+      {
+        "id": 6,
+        "sender": "bot",
+        "message": "Я робот"
+      }
+    ]
+  }
+]

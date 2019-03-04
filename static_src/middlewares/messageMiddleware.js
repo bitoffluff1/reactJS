@@ -10,11 +10,11 @@ export default store => next => (action) => {
             break;
 
         case REPLY_MESSAGE:
-            setInterval(() => store.dispatch(highlight(action.chatId)), 1000);
+            store.dispatch(highlight(action.chatId));
             break;
 
         case HIGHLIGHT:
-            setTimeout(() => store.dispatch(unhighlight()), 500);
+            setTimeout(() => store.dispatch(unhighlight()), 1000);
             break;
 
         case UNHIGHLIGHT:

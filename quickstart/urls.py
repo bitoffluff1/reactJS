@@ -16,8 +16,14 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from core.views import QuickView
+from django.views.decorators.cache import cache_control
+from django.views.generic import TemplateView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url('^', QuickView.as_view()),
+    url(r'^api/chats/', cache_control(max_age=3600)(TemplateView.as_view(
+        template_name="core/data.json",
+        content_type='application/json',
+    )), name='data.json'),
+    url('^', QuickView.as_view())
 ]

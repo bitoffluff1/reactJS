@@ -1,60 +1,83 @@
 import update from 'react-addons-update';
-import {SEND_MESSAGE, REPLY_MESSAGE, ADD_CHAT} from '../actions/messageActions';
-import {HIGHLIGHT, UNHIGHLIGHT} from '../actions/messageActions';
+import {
+    SEND_MESSAGE, REPLY_MESSAGE, ADD_CHAT,
+    HIGHLIGHT, UNHIGHLIGHT,
+    START_CHATS_LOADING, SUCCESS_CHATS_LOADING, ERROR_CHATS_LOADING
+} from '../actions/messageActions';
+
 
 const initialStore = {
     curId: 1,
-    chatList: {1: 'Chat 1', 2: 'Chat 2', 3: 'Chat 3', 4: 'Chat 4', 5: 'Chat 5'},
-    messageLists: {1: [], 2: [], 3: [], 4: [], 5: []},
+    chats: {},
     messages: {},
-    highlightedChat: undefined
+    highlightedChat: undefined,
+    isLoading: true
 };
-
 
 export default function messageReducer(store = initialStore, action) {
     switch (action.type) {
+        case START_CHATS_LOADING: {
+            return update(store, {
+                isLoading: {$set: true}
+            });
+        }
+
+        case SUCCESS_CHATS_LOADING: {
+            console.log(action.payload);
+            return update(store, {
+                chats: {$set: action.payload.entities.chats},
+                messages: {$set: action.payload.entities.messages},
+                curId: {$set: Object.keys(action.payload.entities.messages).length + 1},
+                isLoading: {$set: false},
+            });
+        }
+
+        case ERROR_CHATS_LOADING: {
+            return update(store, {
+                isLoading: {$set: false},
+            });
+        }
+
         case SEND_MESSAGE: {
             const {chatId, message} = action;
-            const {messages, curId, messageLists} = store;
+            const {chats, curId, messages} = store;
 
-            const newMessageList = [...messageLists[chatId], curId];
-            const newMessageLists = {...messageLists, [chatId]: newMessageList};
+            const chat = chats[chatId];
+            chat.messages.push(curId);
 
             const newMessages = {
                 ...messages,
                 [curId]: {
+                    'id': curId,
                     sender: 'me',
-                    message,
-                    chatId
-                }
+                    message
+                },
             };
-
             return update(store, {
                 curId: {$set: curId + 1},
-                messageLists: {$set: newMessageLists},
-                messages: {$set: newMessages}
+                messages: {$set: newMessages},
+                chats: {$merge: {[chatId]: chat}}
             });
         }
 
         case REPLY_MESSAGE: {
             const {chatId} = action;
-            const {messages, curId, messageLists} = store;
+            const {chats, curId, messages} = store;
 
-            const newMessageList = [...messageLists[chatId], curId];
-            const newMessageLists = {...messageLists, [chatId]: newMessageList};
+            const chat = chats[chatId];
+            chat.messages.push(curId);
 
             const newMessages = {
                 ...messages,
                 [curId]: {
+                    'id': curId,
                     sender: 'bot',
-                    message: 'Что нужно?',
-                    chatId
+                    message: 'Что нужно?'
                 }
             };
 
             return update(store, {
                 curId: {$set: curId + 1},
-                messageLists: {$set: newMessageLists},
                 messages: {$set: newMessages}
             });
         }
@@ -77,23 +100,25 @@ export default function messageReducer(store = initialStore, action) {
 
         case ADD_CHAT: {
             const {nameChat} = action;
+
             if (nameChat === '') {
-                const newChatNumber = Object.keys(store.chatList).length + 1;
-                const newChat = {...store.chatList, [newChatNumber]: `Chat ${newChatNumber}`};
-                const newMessageLists = {...store.messageLists, [newChatNumber]: []};
-
+                const newChatNumber = Object.keys(store.chats).length + 1;
+                const newChat = {
+                    ...store.chats,
+                    [newChatNumber]: {'id': [newChatNumber], 'name': `Chat ${newChatNumber}`, 'messages': []}
+                };
                 return update(store, {
-                    chatList: {$set: newChat},
-                    messageLists: {$set: newMessageLists}
+                    chats: {$set: newChat},
                 })
-            } else {
-                const newChatNumber = Object.keys(store.chatList).length + 1;
-                const newChat = {...store.chatList, [newChatNumber]: `${nameChat}`};
-                const newMessageLists = {...store.messageLists, [newChatNumber]: []};
 
+            } else {
+                const newChatNumber = Object.keys(store.chats).length + 1;
+                const newChat = {
+                    ...store.chats,
+                    [newChatNumber]: {'id': [newChatNumber], 'name': `${nameChat}`, 'messages': []}
+                };
                 return update(store, {
-                    chatList: {$set: newChat},
-                    messageLists: {$set: newMessageLists}
+                    chats: {$set: newChat},
                 })
             }
         }
