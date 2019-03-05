@@ -2,16 +2,18 @@ import update from 'react-addons-update';
 import {
     SEND_MESSAGE, REPLY_MESSAGE, ADD_CHAT,
     HIGHLIGHT, UNHIGHLIGHT,
-    START_CHATS_LOADING, SUCCESS_CHATS_LOADING, ERROR_CHATS_LOADING
+    START_CHATS_LOADING, SUCCESS_CHATS_LOADING, ERROR_CHATS_LOADING,
+    START_PROFILE_LOADING, SUCCESS_PROFILE_LOADING, ERROR_PROFILE_LOADING
 } from '../actions/messageActions';
-
 
 const initialStore = {
     curId: 1,
     chats: {},
     messages: {},
     highlightedChat: undefined,
-    isLoading: true
+    isLoading: true,
+    isLoadingP: true,
+    profile: {}
 };
 
 export default function messageReducer(store = initialStore, action) {
@@ -23,7 +25,7 @@ export default function messageReducer(store = initialStore, action) {
         }
 
         case SUCCESS_CHATS_LOADING: {
-            console.log(action.payload);
+            //console.log(action.payload);
             return update(store, {
                 chats: {$set: action.payload.entities.chats},
                 messages: {$set: action.payload.entities.messages},
@@ -35,6 +37,26 @@ export default function messageReducer(store = initialStore, action) {
         case ERROR_CHATS_LOADING: {
             return update(store, {
                 isLoading: {$set: false},
+            });
+        }
+
+         case START_PROFILE_LOADING: {
+            return update(store, {
+                isLoadingP: {$set: true}
+            });
+        }
+
+        case SUCCESS_PROFILE_LOADING: {
+            //console.log(action.payload);
+            return update(store, {
+                profile: {$set: action.payload.entities.profile},
+                isLoadingP: {$set: false},
+            });
+        }
+
+        case ERROR_PROFILE_LOADING: {
+            return update(store, {
+                isLoadingP: {$set: false},
             });
         }
 
@@ -83,19 +105,14 @@ export default function messageReducer(store = initialStore, action) {
         }
 
         case HIGHLIGHT: {
-            const highChat = action.chatId;
-
             return update(store, {
-                highlightedChat: {$set: highChat},
+                highlightedChat: {$set: action.chatId},
             });
         }
         case UNHIGHLIGHT: {
-            const highChat = undefined;
-
             return update(store, {
-                highlightedChat: {$set: highChat},
+                highlightedChat: {$set: undefined},
             });
-
         }
 
         case ADD_CHAT: {

@@ -25,5 +25,9 @@ urlpatterns = [
         template_name="core/data.json",
         content_type='application/json',
     )), name='data.json'),
+    url(r'^api/profile/', cache_control(max_age=3600)(TemplateView.as_view(
+        template_name="core/profile.json",
+        content_type='application/json',
+    )), name='profile.json'),
     url('^', QuickView.as_view())
 ]

@@ -6,14 +6,15 @@ import connect from 'react-redux/es/connect/connect';
 
 class Header extends React.Component {
     static propTypes = {
-        messageCount: PropTypes.number
+        messageCount: PropTypes.number,
     };
 
-
     render() {
-        return (<div className='header'>
-            <p className='header-text'>Общее количество сообщений в мессенджере: {this.props.messageCount}</p>
-        </div>)
+        return (
+            <div className='header'>
+                <a href='/chat/profile/' className='header-profile'>Профиль Хмельниковой Елены</a>
+                <p className='header-text'>Общее количество сообщений в мессенджере: {this.props.messageCount}</p>
+            </div>)
     }
 }
 

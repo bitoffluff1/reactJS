@@ -7,7 +7,7 @@ import {List, ListItem} from 'material-ui/List';
 import ContentInbox from 'material-ui/svg-icons/content/inbox';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import {teal50} from 'material-ui/styles/colors';
-import {addChat, loadChats } from "../actions/messageActions";
+import {addChat, loadChats} from "../actions/messageActions";
 import '../style/layout.sass';
 
 
@@ -42,6 +42,18 @@ class ChatList extends React.Component {
         this.setState({nameChat: ''});
     };
 
+    highlightedChat = (chatNumber) => {
+        if (this.props.highlightedChat !== undefined && this.props.highlightedChat !== this.props.chatId) {
+            if (this.props.highlightedChat === chatNumber) {
+                return 'newMassage';
+            }
+        }
+        if (this.props.chatId === chatNumber) {
+            return 'active';
+        } else {
+            return '';
+        }
+    };
 
     render() {
         const {chats} = this.props;
@@ -50,8 +62,7 @@ class ChatList extends React.Component {
                 <ListItem
                     key={i}
                     style={{color: teal50}}
-                    className={this.props.highlightedChat === chatNumber ? 'newMassage' :
-                        this.props.chatId === chatNumber ? 'active' : ''}
+                    className={this.highlightedChat(chatNumber)}
                     primaryText={`${chats[chatNumber].name}`}
                     leftIcon={<ContentInbox color={teal50}/>}
                     rightIcon={<div className='messageCountInChat'>{chats[chatNumber].messages.length}</div>}
@@ -59,9 +70,8 @@ class ChatList extends React.Component {
                 />
         );
 
-
         return (
-            <List className={'chatList'}>
+            <List className='chatList'>
                 {chatLinks}
                 <input
                     className='chatList_input'

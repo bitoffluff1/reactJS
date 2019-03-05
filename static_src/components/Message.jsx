@@ -6,13 +6,13 @@ import {teal100, lightBlue100} from 'material-ui/styles/colors';
 
 const styles = {
     me: {
-        alignSelf: 'flex-start',
+        alignSelf: 'flex-end',
         paddingLeft: 5,
         paddingRight: 5,
         marginBottom: 2
     },
     bot: {
-        alignSelf: 'flex-end',
+        alignSelf: 'flex-start',
         paddingLeft: 5,
         paddingRight: 5,
         marginBottom: 2
