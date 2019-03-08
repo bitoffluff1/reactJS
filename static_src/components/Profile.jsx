@@ -23,7 +23,7 @@ class Profile extends React.Component {
             (chatNumber, i) =>
                 <Card key={i}>
                     <CardHeader
-                        avatar='./img/ava.jpg'
+                        avatar='/static/core/ava.jpg'
                     />
                     <CardTitle title={`${profile[i + 1].firstName} ${profile[i + 1].lastName}`}/>
                     <CardText>
@@ -33,7 +33,7 @@ class Profile extends React.Component {
         );
         return (
             <div className='profileBox'>
-                <a href='/'><FlatButton label="Чаты"/></a>
+                <a href='/'><FlatButton label="<-- Чаты"/></a>
                 {profileInfo}
             </div>
         )

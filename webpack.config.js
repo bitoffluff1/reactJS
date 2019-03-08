@@ -1,6 +1,7 @@
 const webpack = require('webpack');
-
 const NODE_ENV = process.env.NODE_ENV || 'development';
+const BundleTracker = require('webpack-bundle-tracker');
+const CompressionPlugin = require('compression-webpack-plugin');
 
 module.exports = {
     entry: {
@@ -18,7 +19,9 @@ module.exports = {
     },
 
     plugins: [
-        new webpack.NoEmitOnErrorsPlugin()
+        new webpack.NoEmitOnErrorsPlugin(),
+        new BundleTracker({filename: './webpack-stats.json'}),
+        new CompressionPlugin()
     ],
 
     module: {

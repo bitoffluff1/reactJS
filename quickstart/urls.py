@@ -15,11 +15,12 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from core.views import QuickView
+from core.views import QuickView, pwa_installed
 from django.views.decorators.cache import cache_control
 from django.views.generic import TemplateView
 
 urlpatterns = [
+    url('analytics/pwa_installed/', pwa_installed),
     url(r'^admin/', admin.site.urls),
     url(r'^api/chats/', cache_control(max_age=3600)(TemplateView.as_view(
         template_name="core/data.json",
@@ -29,5 +30,9 @@ urlpatterns = [
         template_name="core/profile.json",
         content_type='application/json',
     )), name='profile.json'),
+    url(r'^service-worker.js', cache_control(max_age=3600)(TemplateView.as_view(
+        template_name="core/service-worker.js",
+        content_type='application/javascript',
+    )), name='service-worker.js'),
     url('^', QuickView.as_view())
 ]
